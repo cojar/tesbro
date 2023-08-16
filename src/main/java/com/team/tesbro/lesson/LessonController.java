@@ -28,9 +28,8 @@ public class LessonController {
     private final LessonService lessonService;
     private final ReviewService reviewService;
     private final TeacherService teacherService;
-    private List<Lesson> lessonList;
-
     private final AcademyService academyService;
+    private List<Lesson> lessonList;
     @GetMapping("/academy/lesson")
     public String handleSelectedData(Model model) {
     lessonList = lessonService.getList();
