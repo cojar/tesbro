@@ -10,6 +10,9 @@
     <!--        이름이랑 정보 요약&찜/공유      -->
     <div class="content">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script th:src="@{/academy.js}"></script>
+        <script type="text/javascript"
+                src="//dapi.kakao.com/v2/maps/sdk.js?appkey=794a40541300254bb5698381e1789213&libraries=services"></script>
         <link href="/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
         <!-- Air datepicker css -->
         <script src="/datepicker.js"></script> <!-- Air datepicker js -->
@@ -297,56 +300,41 @@
 
         <script>
         $(document).ready(function() {
-  $("#share-link").click(function() {
-    var dummy = document.createElement('input');
-    var text = window.location.href;
+          $("#share-link").click(function() {
+            var dummy = document.createElement('input');
+            var text = window.location.href;
 
-    document.body.appendChild(dummy);
-    dummy.value = text;
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
 
-    $("#copy-message").show().delay(2000).fadeOut(1000);
-  });
-});
+            $("#copy-message").show().delay(2000).fadeOut(1000);
+          });
+        });
 
+          document.querySelectorAll('.modify-link').forEach(link => {
+          link.addEventListener('click', function(event) {
+            event.preventDefault(); // 페이지 리로드 방지
+            const reviewId = event.target.getAttribute('data-review-id');
+            const reviewContent = event.target.getAttribute('data-review-content');
+            const reviewUsername = event.target.getAttribute('data-review-username');
+            openModifyPopup(reviewId, reviewContent, reviewUsername);
+          });
+        });
 
+          function openModifyPopup(reviewId, reviewContent) {
+           localStorage.setItem("reviewContent", reviewContent);
+            var url = "/review/modify/" + reviewId;
+            var windowFeatures = "width=600, height=300, location=no, status=no, toolbar=no, scrollbars=yes";
+            const popup = window.open(url, "modifyReviewPopup", windowFeatures);
 
+            popup.onbeforeunload = function () {
+              location.reload();
+            };
+          }
 
-
-
-
-  document.querySelectorAll('.modify-link').forEach(link => {
-  link.addEventListener('click', function(event) {
-    event.preventDefault(); // 페이지 리로드 방지
-    const reviewId = event.target.getAttribute('data-review-id');
-    const reviewContent = event.target.getAttribute('data-review-content');
-    const reviewUsername = event.target.getAttribute('data-review-username');
-    openModifyPopup(reviewId, reviewContent, reviewUsername);
-  });
-});
-
-  function openModifyPopup(reviewId, reviewContent) {
-   localStorage.setItem("reviewContent", reviewContent);
-    var url = "/review/modify/" + reviewId;
-    var windowFeatures = "width=600, height=300, location=no, status=no, toolbar=no, scrollbars=yes";
-    const popup = window.open(url, "modifyReviewPopup", windowFeatures);
-
-    popup.onbeforeunload = function () {
-      location.reload();
-    };
-
-
-  }
-
-
-
-
-        </script>
-
-
-        <script>
     $(document).ready(function() {
       var popupModal = $("#popupModal");
       var closeBtn = $(".close");
@@ -361,13 +349,8 @@
         });
       }
     });
-
-
-
-
         </script>
 
-        <script th:src="@{/academy.js}"></script>
         <script>
     $("#datePicker").datepicker({
        language: 'ko',
@@ -421,14 +404,8 @@
             console.log(starRating);
         }
     }
-
-
-
-
         </script>
 
-        <script type="text/javascript"
-                src="//dapi.kakao.com/v2/maps/sdk.js?appkey=794a40541300254bb5698381e1789213&libraries=services"></script>
         <script>
         var addressElement = document.querySelector(".academy_address");
 addressElement.style.display = "none";
